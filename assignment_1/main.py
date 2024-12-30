@@ -1,33 +1,20 @@
-from fastapi import FastAPI #, HTTPException, Depends
+from fastapi import FastAPI , HTTPException
 from pydantic import BaseModel
-from user_api_function import UserAPI
-import redis
-#import logging
+from user_api_function import register_user
+from models import User
 
 app = FastAPI()
 
-r = redis.StrictRedis(host="localhost", port=6379, db=0, decode_responses=True)
-
-class User(BaseModel):
-    username: str
-    password: str
+@app.get("/")
+def main_page():
+    return {"Welcome":"Here comes your demo home page"}
 
 @app.post("/register")
-async def register_user(user: User):
-    return await UserAPI.register(user)
-
-@app.post("/login")
-async def login_user(user: User):
-    return await UserAPI.login(user)
-
-@app.get("/user/{user_id}")
-async def get_user(user_id: int):
-    return await UserAPI.get_user_info(user_id)
-
-@app.put("/user/{user_id}")
-async def update_user(user_id: int, user: User):
-    return await UserAPI.update_user(user_id, user)
-
-@app.delete("/user/{user_id}")
-async def delete_user(user_id: int):
-    return await UserAPI.delete_user(user_id)
+def register_user(user: User):
+    try:
+        result = register_user(user)
+    except Exception as e:
+        # log error here
+        # return specific reponse in case of failure
+        print(f"Error: {e}")
+        raise HTTPException(status_code= 500, detail="Internal Server Error.")

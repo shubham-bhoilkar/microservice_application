@@ -1,33 +1,37 @@
-from fastapi import FastAPI #, HTTPException, Depends
-from pydantic import BaseModel
-from user_api_function import UserAPI
-import redis
-#import logging
+import sqlite3
+from fastapi import HTTPException
+import logging
+from configparser import ConfigParser
 
-app = FastAPI()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-r = redis.StrictRedis(host="localhost", port=6379, db=0, decode_responses=True)
+def get_db_connection():
+    conn = sqlite3.connect('user.db')
+    return conn
 
-class User(BaseModel):
-    username: str
-    password: str
+def register_user(user):
+    try:
+        username = user.username
+        password = user.password
 
-@app.post("/register")
-async def register_user(user: User):
-    return await UserAPI.register(user)
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('select * from users where username = ?', (username,))
+        existing_user = cursor.fetchone()
+        
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Username already exists")
+        
+        cursor.execute('insert into users (username, password) VALUES (?, ?)', (username, password))
+        conn.commit()
+        conn.close()
 
-@app.post("/login")
-async def login_user(user: User):
-    return await UserAPI.login(user)
-
-@app.get("/user/{user_id}")
-async def get_user(user_id: int):
-    return await UserAPI.get_user_info(user_id)
-
-@app.put("/user/{user_id}")
-async def update_user(user_id: int, user: User):
-    return await UserAPI.update_user(user_id, user)
-
-@app.delete("/user/{user_id}")
-async def delete_user(user_id: int):
-    return await UserAPI.delete_user(user_id)
+        return {"message": "User registered successfully"}
+    
+    except HTTPException as e:
+        logger.error(f"Error registering user: {e.detail}")
+        raise e
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
