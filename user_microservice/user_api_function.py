@@ -28,9 +28,8 @@ def register_user_logic(user_data, log):
 #def read_records(table_name: str, filters=None, log=None):
 def view_records_logic(user_data, log):
     try:
-        data = {"user_id": user_data.user_id}
-        
-        result = read_records("user", data, log)
+        filter = {"user_id": user_data.user_id}
+        result = read_records("user_details", filter, log)
         
         if result:
             log.info(f"User information retrieved successfully for user_id {user_data.user_id}.")

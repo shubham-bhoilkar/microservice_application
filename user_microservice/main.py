@@ -2,6 +2,7 @@ from fastapi import FastAPI , HTTPException
 from pydantic import BaseModel
 from user_api_function import register_user_logic
 from user_api_function import read_records
+from user_api_function import view_records_logic
 from models import User
 import logging
 
@@ -35,10 +36,8 @@ def register_user(user: User):
 @app.get("/get_user_details/{user_id}")
 def get_user_details(user_id: int, logger: logging.Logger):
     try:
-        filter = {"user_id": user_id}
-        
-        #note here the parameters ae dirrectly going into the util_db.py rather than user_api_function.py and therfere once again tuscked that I am not using user_api_function.py file
-        records = read_records("user_details", filter, logger)
+        #value user_id passing to user_api_function
+        records = view_records_logic(user_id, logger)
         
         if records:
             return {"status": "success", "data": records}
