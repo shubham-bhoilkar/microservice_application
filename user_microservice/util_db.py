@@ -1,9 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
-from models import User
-from user_models import User
-from delete_user_models import delete_user
 
 # Global Database Configuration
 DATABASE_URL = "mysql+pymysql://root:neural123@10.10.7.64:3306/mydatabase"

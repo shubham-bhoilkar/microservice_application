@@ -2,7 +2,6 @@ from util_db import create_record
 from util_db import read_records
 from util_db import update_record
 from util_db import delete_record
-from delete_user_models  import delete_user
 # import logging
 
 def register_user_logic(user_data, log):
