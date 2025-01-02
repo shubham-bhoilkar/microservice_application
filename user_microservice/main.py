@@ -32,11 +32,13 @@ def register_user(user: User):
         print(f"Error: {e}")
         raise HTTPException(status_code= 500, detail="Internal Server Error.")
 
-@app.get("/read-records/{table_name}")
-def view_records(user: User):
+@app.get("/get_user_details/{user_id}")
+def get_user_details(user_id: int, logger: logging.Logger):
     try:
-        # Call the function to get records with the provided filters
-        records = read_records(user.table_name, logger)
+        filter = {"user_id": user_id}
+        
+        #note here the parameters ae dirrectly going into the util_db.py rather than user_api_function.py and therfere once again tuscked that I am not using user_api_function.py file
+        records = read_records("user_details", filter, logger)
         
         if records:
             return {"status": "success", "data": records}
@@ -44,6 +46,6 @@ def view_records(user: User):
             return {"status": "success", "data": []}
         
     except Exception as e:
-        logger.error(f"Error reading records from table {user.table_name}: {e}")
-        raise HTTPException(status_code=500, detail=f"Error reading records from table {user.table_name}")
-
+        # Log the error and raise an HTTP exception
+        logger.error(f"Error reading records from table 'user_details': {e}")
+        raise HTTPException(status_code=500, detail=f"Error reading records from table 'user_details'.")

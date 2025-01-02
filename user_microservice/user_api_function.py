@@ -26,19 +26,21 @@ def register_user_logic(user_data, log):
         return "registration action complete."
 
 #def read_records(table_name: str, filters=None, log=None):
-def retrive_data(user_data, log):
+def view_records_logic(user_data, log):
     try:
-        data={
-            "user_id": user_data.user_id
-        }
-        result = read_records("user",data,log)
+        data = {"user_id": user_data.user_id}
+        
+        result = read_records("user", data, log)
         
         if result:
-            log.info(f"user information provided!")
+            log.info(f"User information retrieved successfully for user_id {user_data.user_id}.")
+            return result  # Return the user data or appropriate response
         else:
-            log.error(f"select query failed!")
+            log.error(f"No user information found for user_id {user_data.user_id}.")
+            return None  # No data found
         
     except Exception as e:
-        log.error(f"user information not found!")
+        log.error(f"Error retrieving user information: {e}")
+        return None  # Return None in case of an error
     finally:
-        return "action complete with read records."
+        log.info("User record retrieval action completed.")

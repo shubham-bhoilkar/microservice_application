@@ -40,13 +40,17 @@ def create_record(table_name: str, data: dict, log=None):
 def read_records(table_name: str, filters=None, log=None):
     try:
         base_query = f"SELECT * FROM {table_name}"
+        
         if filters:
             filter_clauses = " AND ".join(f"{key} = :{key}" for key in filters.keys())
             base_query += f" WHERE {filter_clauses}"
+        
         if log:
             log.info(f"Reading records from table '{table_name}' with filters: {filters}")
+        
         with Session() as session:
-            return session.execute(base_query, filters or {}).fetchall()
+            result = session.execute(base_query, filters or {}).fetchall()
+            return result
     except Exception as e:
         if log:
             log.error(f"Failed to read records from table '{table_name}' with filters: {filters}. Error: {e}")
