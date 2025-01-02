@@ -3,6 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from models import User
 from user_models import User
+from delete_user_models import delete_user
 
 # Global Database Configuration
 DATABASE_URL = "mysql+pymysql://root:neural123@10.10.7.64:3306/mydatabase"
@@ -37,7 +38,7 @@ def create_record(table_name: str, data: dict, log=None):
             log.error(f"Failed to create record in table '{table_name}': {data}. Error: {e}")
         raise
 
-#api pending/ completed
+#api completed
 def read_records(table_name: str, filters=None, log=None):
     try:
         base_query = f"SELECT * FROM {table_name}"
@@ -72,15 +73,24 @@ def update_record(table_name: str, record_id: int, id_column: str = "id", data: 
         raise
 
 #api pending
-def delete_record(table_name: str, record_id: int, id_column: str = "id", log=None):
+def delete_record(table_name: str, filters: dict, log=None):
     try:
-        query = f"DELETE FROM {table_name} WHERE {id_column} = :id"
-        execute_query(query, {"id": record_id}, log)
+        # Construct the DELETE SQL query based on the filters provided
+        filter_clauses = " AND ".join(f"{key} = :{key}" for key in filters.keys())
+        query = f"DELETE FROM {table_name} WHERE {filter_clauses}"
+        
+        # Log the query for debugging purposes
         if log:
-            log.info(f"Record deleted from table '{table_name}' with ID {record_id}")
+            log.info(f"Deleting record from table '{table_name}' with filters: {filters}")
+        
+        # Execute the query using a session
+        with Session() as session:
+            result = session.execute(query, filters)
+            session.commit()  # Commit the transaction to delete the record
+            return result.rowcount > 0  # Return True if at least one record was deleted
     except Exception as e:
         if log:
-            log.error(f"Failed to delete record from table '{table_name}' with ID {record_id}. Error: {e}")
+            log.error(f"Failed to delete record from table '{table_name}' with filters: {filters}. Error: {e}")
         raise
 
 #api pending

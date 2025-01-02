@@ -1,5 +1,8 @@
 from util_db import create_record
 from util_db import read_records
+from util_db import update_record
+from util_db import delete_record
+from delete_user_models  import delete_user
 # import logging
 
 def register_user_logic(user_data, log):
@@ -43,3 +46,35 @@ def view_records_logic(user_data, log):
         return None  # Return None in case of an error
     finally:
         log.info("User record retrieval action completed.")
+
+#def update_record(table_name: str, record_id: int, id_column: str = "id", data: dict = None, log=None):
+def update_user_logic(user_data, log):
+    try:
+        data = {
+            "user_id":user_data.user_id,
+            "first_name":user_data.first_name,
+            "last_name":user_data.last_name,
+            "phone":user_data.phone,
+            "email":user_data.email,
+            "designation":user_data.designation 
+        }
+        result = update_record("user_details",data.keys("user_id"),data)
+        if result:
+            log.info(f"User {user_data.user_id} updated succesfully.")
+        else:
+            log.error(f"User {user_data.user_id} updation failed.")
+    except Exception as e:
+        log.error(f"Error during updating user details.")
+    finally:
+        return "updation action complete."
+
+def delete_user_logic(user_id: int, log):
+    try:
+        filters = {"user_id": user_id}
+        result = delete_record("user", filters, log)
+        
+        return result
+    
+    except Exception as e:
+        log.error(f"Error in delete_user_logic for user_id {user_id}: {e}")
+        raise  
