@@ -1,4 +1,4 @@
 from pydantic import BaseModel
 
-class User(BaseModel):
+class view_user(BaseModel):
     user_id : int

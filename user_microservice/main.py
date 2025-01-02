@@ -4,8 +4,8 @@ from user_api_function import register_user_logic
 from user_api_function import view_records_logic
 from user_api_function import update_user_logic
 from user_api_function import delete_user_logic
-from models import create_user
-from update_user_models import update_user
+from models.register_models import create_user
+from models.update_user_models import update_user
 
 import logging
 
