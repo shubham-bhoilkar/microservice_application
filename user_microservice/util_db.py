@@ -24,6 +24,7 @@ def execute_query(query: str, params=None, log=None):
 #api created and available
 def create_record(table_name: str, data: dict, log=None):
     try:
+        log.info(f"Table creation request.")
         columns = ", ".join(data.keys())
         placeholders = ", ".join(f":{key}" for key in data.keys())
         query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
@@ -38,6 +39,7 @@ def create_record(table_name: str, data: dict, log=None):
 #api completed
 def read_records(table_name: str, filters=None, log=None):
     try:
+        log.info(f"Record view request by {filter.user_id}.")
         base_query = f"SELECT * FROM {table_name}"
         
         if filters:
@@ -58,6 +60,7 @@ def read_records(table_name: str, filters=None, log=None):
 #api pending
 def update_record(table_name: str, record_id: int, id_column: str = "id", data: dict = None, log=None):
     try:
+        log.info(f"Update record request.")
         set_clause = ", ".join(f"{key} = :{key}" for key in data.keys())
         query = f"UPDATE {table_name} SET {set_clause} WHERE {id_column} = :id"
         params = {**data, "id": record_id}
@@ -72,6 +75,7 @@ def update_record(table_name: str, record_id: int, id_column: str = "id", data: 
 #api pending
 def delete_record(table_name: str, filters: dict, log=None):
     try:
+        log.info(f"Delete record request.")
         # Construct the DELETE SQL query based on the filters provided
         filter_clauses = " AND ".join(f"{key} = :{key}" for key in filters.keys())
         query = f"DELETE FROM {table_name} WHERE {filter_clauses}"

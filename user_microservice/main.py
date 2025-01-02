@@ -4,8 +4,8 @@ from user_api_function import register_user_logic
 from user_api_function import view_records_logic
 from user_api_function import update_user_logic
 from user_api_function import delete_user_logic
-from models.register_models import create_user
-from models.update_user_models import update_user
+from models import create_user
+from models import update_user
 
 import logging
 
@@ -29,13 +29,19 @@ def main_page():
 @app.post("/register")
 def register_user(user: create_user):
     try:
+#        logger.info("Registration api request.")
         result = register_user_logic(user, logger)
+
+        if result:
+            return {"status": "success", "message":"User created sucessfully" }
+        else:
+            return {"status": "success", "message":"User creatoin failed." }
     except Exception as e:
         print(f"Error: {e}")
         raise HTTPException(status_code= 500, detail="Internal Server Error.")
 
-@app.get("/get_user_details/{user_id}")
-def get_user_details(user_id: int, logger: logging.Logger):
+@app.get("/get_user_details")
+def get_user_details(user_id: int):
     try:
         #value user_id passing to user_api_function
         records = view_records_logic(user_id, logger)
@@ -53,13 +59,17 @@ def get_user_details(user_id: int, logger: logging.Logger):
 def update_user_details(user: update_user):
     try:
         result = update_user_logic(user, logger)
-        
+        if result:
+            return {"status": "success", "message": "user details updated."}
+        else:
+            return {"status": "failure", "message": "user detail update failed."}
+            
     except Exception as e:
         print(f"Error: {e}")
         raise HTTPException(status_code = 500, detail="Internal Server Error.")
 
 @app.delete("/delete_user/{user_id}")
-def delete_user(user_id: int, logger: logging.Logger):
+def delete_user(user_id: int):
     try:
         result = delete_user_logic(user_id, logger)
         
@@ -71,3 +81,7 @@ def delete_user(user_id: int, logger: logging.Logger):
     except Exception as e:
         logger.error(f"Error deleting user with user_id {user_id}: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error.")
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app=app,host="0.0.0.0", port=50001)

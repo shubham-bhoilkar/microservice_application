@@ -6,9 +6,10 @@ from util_db import delete_record
 
 def register_user_logic(user_data, log):
     try:
-        
+        log.info(f"Registraion request recived with user data {user_data}")
         data = {    
-            "username": user_data.username,
+            "first_name": user_data.first_name,
+            "last_name":user_data.last_name,
             "phone": user_data.phone,
             "email": user_data.email,
             "designation": user_data.designation }
@@ -23,13 +24,14 @@ def register_user_logic(user_data, log):
 
     except Exception as e:
         log.error(f"Error during creating user registration.")
+        return False
 
     finally:
         return "registration action complete."
 
-#def read_records(table_name: str, filters=None, log=None):
 def view_records_logic(user_data, log):
     try:
+        log.info(f"Data view request by user: {user_data}")
         filter = {"user_id": user_data.user_id}
         result = read_records("user_details", filter, log)
         
@@ -38,7 +40,7 @@ def view_records_logic(user_data, log):
             return result  # Return the user data or appropriate response
         else:
             log.error(f"No user information found for user_id {user_data.user_id}.")
-            return None  # No data found
+            return "No Data Found."
         
     except Exception as e:
         log.error(f"Error retrieving user information: {e}")
@@ -46,11 +48,11 @@ def view_records_logic(user_data, log):
     finally:
         log.info("User record retrieval action completed.")
 
-#def update_record(table_name: str, record_id: int, id_column: str = "id", data: dict = None, log=None):
 def update_user_logic(user_data, log):
     try:
+        log.info(f"User data update request received by user: {user_data}")
         data = {
-            "user_id":user_data.user_id,
+            # "user_id":user_data.user_id,
             "first_name":user_data.first_name,
             "last_name":user_data.last_name,
             "phone":user_data.phone,
@@ -69,6 +71,7 @@ def update_user_logic(user_data, log):
 
 def delete_user_logic(user_id: int, log):
     try:
+        log.info(f"User data delete request received by user id: {user_id}")
         filters = {"user_id": user_id}
         result = delete_record("user", filters, log)
         
