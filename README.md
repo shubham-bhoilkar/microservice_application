@@ -1,2 +1,2 @@
-# sam_assignment
-shubham assignment
+# User Registration Application
+Microservice application for user Registration

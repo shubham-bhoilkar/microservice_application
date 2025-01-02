@@ -24,7 +24,7 @@ def execute_query(query: str, params=None, log=None):
 #api created and available
 def create_record(table_name: str, data: dict, log=None):
     try:
-        log.info(f"Table creation request.")
+        log.info("Table creation request.")
         columns = ", ".join(data.keys())
         placeholders = ", ".join(f":{key}" for key in data.keys())
         query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
@@ -60,7 +60,7 @@ def read_records(table_name: str, filters=None, log=None):
 #api pending
 def update_record(table_name: str, record_id: int, id_column: str = "id", data: dict = None, log=None):
     try:
-        log.info(f"Update record request.")
+        log.info("Update record request.")
         set_clause = ", ".join(f"{key} = :{key}" for key in data.keys())
         query = f"UPDATE {table_name} SET {set_clause} WHERE {id_column} = :id"
         params = {**data, "id": record_id}
@@ -76,15 +76,12 @@ def update_record(table_name: str, record_id: int, id_column: str = "id", data: 
 def delete_record(table_name: str, filters: dict, log=None):
     try:
         log.info(f"Delete record request.")
-        # Construct the DELETE SQL query based on the filters provided
         filter_clauses = " AND ".join(f"{key} = :{key}" for key in filters.keys())
         query = f"DELETE FROM {table_name} WHERE {filter_clauses}"
         
-        # Log the query for debugging purposes
         if log:
             log.info(f"Deleting record from table '{table_name}' with filters: {filters}")
         
-        # Execute the query using a session
         with Session() as session:
             result = session.execute(query, filters)
             session.commit()  # Commit the transaction to delete the record
@@ -94,7 +91,6 @@ def delete_record(table_name: str, filters: dict, log=None):
             log.error(f"Failed to delete record from table '{table_name}' with filters: {filters}. Error: {e}")
         raise
 
-#api pending
 def initialize_table(table_name: str, schema: str, log=None):
     try:
         with engine.connect() as connection:
@@ -107,7 +103,6 @@ def initialize_table(table_name: str, schema: str, log=None):
         raise
 
 
-# Example Usage
 if __name__ == "__main__":
     # Initialize a table
     table_name = "users"

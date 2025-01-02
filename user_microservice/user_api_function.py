@@ -2,7 +2,6 @@ from util_db import create_record
 from util_db import read_records
 from util_db import update_record
 from util_db import delete_record
-# import logging
 
 def register_user_logic(user_data, log):
     try:
@@ -20,14 +19,11 @@ def register_user_logic(user_data, log):
         else:
             log.error(f"User {user_data.username} with user id: {user_data.user_id} creation failed.")
 
-        return True  # Registration success
+        return True
 
     except Exception as e:
         log.error(f"Error during creating user registration.")
         return False
-
-    finally:
-        return "registration action complete."
 
 def view_records_logic(user_data, log):
     try:
@@ -37,22 +33,19 @@ def view_records_logic(user_data, log):
         
         if result:
             log.info(f"User information retrieved successfully for user_id {user_data.user_id}.")
-            return result  # Return the user data or appropriate response
+            return result
         else:
             log.error(f"No user information found for user_id {user_data.user_id}.")
             return "No Data Found."
         
     except Exception as e:
         log.error(f"Error retrieving user information: {e}")
-        return None  # Return None in case of an error
-    finally:
-        log.info("User record retrieval action completed.")
+        return None  
 
 def update_user_logic(user_data, log):
     try:
         log.info(f"User data update request received by user: {user_data}")
         data = {
-            # "user_id":user_data.user_id,
             "first_name":user_data.first_name,
             "last_name":user_data.last_name,
             "phone":user_data.phone,
@@ -66,8 +59,6 @@ def update_user_logic(user_data, log):
             log.error(f"User {user_data.user_id} updation failed.")
     except Exception as e:
         log.error(f"Error during updating user details.")
-    finally:
-        return "updation action complete."
 
 def delete_user_logic(user_id: int, log):
     try:
@@ -79,4 +70,4 @@ def delete_user_logic(user_id: int, log):
     
     except Exception as e:
         log.error(f"Error in delete_user_logic for user_id {user_id}: {e}")
-        raise  
+        raise e

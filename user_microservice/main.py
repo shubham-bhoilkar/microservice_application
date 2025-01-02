@@ -1,26 +1,15 @@
 from fastapi import FastAPI , HTTPException
-from pydantic import BaseModel
-from user_api_function import register_user_logic
-from user_api_function import view_records_logic
-from user_api_function import update_user_logic
-from user_api_function import delete_user_logic
-from models import create_user
-from models import update_user
+from models import create_user ,update_user
+from user_api_function import register_user_logic, view_records_logic ,update_user_logic ,delete_user_logic
 
 import logging
 
 app = FastAPI()
 
 logger = logging.getLogger("user_microservice")
-logging.basicConfig(level=logging.INFO)
-
-# Define the Pydantic model for the user registration request
-class User(BaseModel):
-    first_name: str
-    last_name: str
-    phone: int
-    email: str
-    designation: str
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    handlers=[logging.FileHandler("app.log"),logging.StreamHandler()])
 
 @app.get("/")
 def main_page():
@@ -35,7 +24,7 @@ def register_user(user: create_user):
         if result:
             return {"status": "success", "message":"User created sucessfully" }
         else:
-            return {"status": "success", "message":"User creatoin failed." }
+            return {"status": "failure", "message":"User creatoin failed." }
     except Exception as e:
         print(f"Error: {e}")
         raise HTTPException(status_code= 500, detail="Internal Server Error.")
@@ -49,7 +38,7 @@ def get_user_details(user_id: int):
         if records:
             return {"status": "success", "data": records}
         else:
-            return {"status": "success", "data": []}
+            return {"status": "failure", "data": []}
         
     except Exception as e:
         logger.error(f"Error reading records from table 'user_details': {e}")
