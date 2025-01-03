@@ -3,6 +3,10 @@ from models import create_user ,update_user
 from user_api_function import register_user_logic, view_records_logic ,update_user_logic ,delete_user_logic
 import logging
 from logging.handlers import RotatingFileHandler
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 logger = logging.getLogger("user_microservice")
 def setup_logging():
@@ -25,7 +29,9 @@ def setup_logging():
     logger.addHandler(console_handler)
 
     return logger
-    
+
+
+
 app = FastAPI()
 
 @app.get("/")
