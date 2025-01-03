@@ -6,31 +6,30 @@ from logging.handlers import RotatingFileHandler
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('/workspaces/sam_assignment/user_microservice/config.ini')
 
-logger = logging.getLogger("user_microservice")
-def setup_logging():
+host = config['Server']['host']
+port = config['Server']['port']
+log_file_path = config['Log']['file_path']
+
+
+def setup_logging(file_path):
     logger.setLevel(logging.DEBUG)
 
-    log_file_path = "app_logs/application.log"
+    log_file_path = file_path
     file_handler = RotatingFileHandler(log_file_path, maxBytes=5*1024*1024, backupCount=5)
     file_handler.setLevel(logging.DEBUG)
-
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
 
     formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
-    file_handler.setFormatter(formatter)
-    console_handler.setFormatter(formatter)
 
     logger.addHandler(file_handler)
-    logger.addHandler(console_handler)
+
 
     return logger
 
-
+logger = setup_logging(log_file_path)
 
 app = FastAPI()
 
@@ -94,4 +93,4 @@ def delete_user(user_id: int):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app=app,host="0.0.0.0", port=50001)
+    uvicorn.run(app=app,host=host, port=port)
