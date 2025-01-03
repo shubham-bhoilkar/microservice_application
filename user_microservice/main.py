@@ -1,15 +1,32 @@
 from fastapi import FastAPI , HTTPException
 from models import create_user ,update_user
 from user_api_function import register_user_logic, view_records_logic ,update_user_logic ,delete_user_logic
-
 import logging
-
-app = FastAPI()
+from logging.handlers import RotatingFileHandler
 
 logger = logging.getLogger("user_microservice")
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    handlers=[logging.FileHandler("app.log"),logging.StreamHandler()])
+def setup_logging():
+    logger.setLevel(logging.DEBUG)
+
+    log_file_path = "app_logs/application.log"
+    file_handler = RotatingFileHandler(log_file_path, maxBytes=5*1024*1024, backupCount=5)
+    file_handler.setLevel(logging.DEBUG)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    file_handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    return logger
+    
+app = FastAPI()
 
 @app.get("/")
 def main_page():
@@ -18,7 +35,6 @@ def main_page():
 @app.post("/register")
 def register_user(user: create_user):
     try:
-#        logger.info("Registration api request.")
         result = register_user_logic(user, logger)
 
         if result:
@@ -32,7 +48,6 @@ def register_user(user: create_user):
 @app.get("/get_user_details")
 def get_user_details(user_id: int):
     try:
-        #value user_id passing to user_api_function
         records = view_records_logic(user_id, logger)
         
         if records:

@@ -10,6 +10,7 @@ Session = sessionmaker(bind=engine)
 # Generic CRUD Operations with Exception Handling and Logging
 def execute_query(query: str, params=None, log=None):
     try:
+        log.info("Query execute reques.")
         with Session() as session:
             if log:
                 log.info(f"Executing query: {query} with params: {params}")
@@ -93,6 +94,7 @@ def delete_record(table_name: str, filters: dict, log=None):
 
 def initialize_table(table_name: str, schema: str, log=None):
     try:
+        log.info("Initilizing table request received.")
         with engine.connect() as connection:
             if log:
                 log.info(f"Initializing table '{table_name}' with schema: {schema}")

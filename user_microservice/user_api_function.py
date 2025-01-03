@@ -1,7 +1,4 @@
-from util_db import create_record
-from util_db import read_records
-from util_db import update_record
-from util_db import delete_record
+from util_db import create_record , read_records , update_record ,delete_record
 
 def register_user_logic(user_data, log):
     try:
