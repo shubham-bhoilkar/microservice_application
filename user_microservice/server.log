@@ -1,0 +1,7 @@
+2025-01-04 10:24:14,873 - user_microservice - INFO - Registraion request recived with user data first_name='string' last_name='string' phone=0 email='string' designation='string'
+2025-01-04 10:26:03,700 - user_microservice - INFO - Registraion request recived with user data first_name='string' last_name='string' phone=0 email='string' designation='string'
+2025-01-04 10:26:33,128 - user_microservice - ERROR - Failed to create record in table 'user_details': {'first_name': 'string', 'last_name': 'string', 'phone': 0, 'email': 'string', 'designation': 'string'}. Error: 'NoneType' object has no attribute 'error'
+2025-01-04 10:26:33,129 - user_microservice - ERROR - Error during creating user registration.
+2025-01-04 10:26:41,040 - user_microservice - INFO - Registraion request recived with user data first_name='string' last_name='string' phone=0 email='string' designation='string'
+2025-01-04 10:32:26,390 - user_microservice - ERROR - Failed to create record in table 'user_details': {'first_name': 'string', 'last_name': 'string', 'phone': 0, 'email': 'string', 'designation': 'string'}. Error: 'NoneType' object has no attribute 'error'
+2025-01-04 10:32:26,918 - user_microservice - ERROR - Error during creating user registration.

@@ -9,7 +9,7 @@ def register_user_logic(user_data, log):
             "phone": user_data.phone,
             "email": user_data.email,
             "designation": user_data.designation }
-        result = create_record("user", data, log)
+        result = create_record("user_details", data, log)
 
         if result:
             log.info(f"User {user_data.username} with user id: {user_data.user_id} registered successfully.")

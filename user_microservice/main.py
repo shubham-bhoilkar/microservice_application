@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('/workspaces/sam_assignment/user_microservice/config.ini')
 
 host = config['Server']['host']
 port = config['Server']['port']
@@ -94,4 +94,4 @@ def delete_user(user_id: int):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app=app,host=host, port=port)
+    uvicorn.run(app=app,host=host, port=eval(port))

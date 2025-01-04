@@ -6,14 +6,13 @@ config.read('/workspaces/sam_assignment/user_microservice/config.ini')
 
 host = config['Database']['host']
 database = config['Database']['db_name']
-port = config['Server']['port']
-driver = config['Server']['driver']
+driver = config['Database']['driver']
 user = config['Database']['user']
 password = config['Database']['password']
 log_file_path = config['Log']['file_path']
               
 # Global Database Configuration
-CONNECTION_STRING = f"Driver={driver};Server={host};Database={database};user={user};password={password}"
+CONNECTION_STRING = f"DRIVER={driver};SERVER={host};DATABASE={database};UID={user};PWD={password}"
 #CONNECTION_STRING = "DRIVER=MariaDB ODBC 3.1 Driver;SERVER=10.10.7.64;DATABASE=test_database;UID=root;PWD=neural123"
 
 # Generic CRUD Operations with Exception Handling and Logging
@@ -38,12 +37,12 @@ def execute_query(query: str, params=None,log=None):
         raise RuntimeError(f"Database operation failed: {e}") from e
 
 # Create Record
-def create_record(table_name: str, data: dict,log =None):
+def create_record(table_name: str, data: dict,log = None):
     try:
         columns = ", ".join(data.keys())
         placeholders = ", ".join("?" for _ in data.keys())
         query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
-        execute_query(query, tuple(data.values()))
+        execute_query(query, tuple(data.values()), log)
         log.info(f"Record created in table '{table_name}': {data}")
     except Exception as e:
         log.error(f"Failed to create record in table '{table_name}': {data}. Error: {e}")
