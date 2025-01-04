@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/workspaces/sam_assignment/user_microservice/config.ini')
+config.read('config.ini')
 
 host = config['Server']['host']
 port = config['Server']['port']
@@ -14,16 +14,17 @@ log_file_path = config['Log']['file_path']
 
 
 def setup_logging(file_path):
+    logger = logging.getLogger('user_microservice')
     logger.setLevel(logging.DEBUG)
 
-    log_file_path = file_path
+#    log_file_path = file_path
     file_handler = RotatingFileHandler(log_file_path, maxBytes=5*1024*1024, backupCount=5)
     file_handler.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
-
+    file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
 
@@ -47,7 +48,7 @@ def register_user(user: create_user):
         else:
             return {"status": "failure", "message":"User creatoin failed." }
     except Exception as e:
-        print(f"Error: {e}")
+        logger.error(f"Error during user registration: {e}")
         raise HTTPException(status_code= 500, detail="Internal Server Error.")
 
 @app.get("/get_user_details")
@@ -74,7 +75,7 @@ def update_user_details(user: update_user):
             return {"status": "failure", "message": "user detail update failed."}
             
     except Exception as e:
-        print(f"Error: {e}")
+        logger.error(f"Error during the update: {e}")
         raise HTTPException(status_code = 500, detail="Internal Server Error.")
 
 @app.delete("/delete_user/{user_id}")

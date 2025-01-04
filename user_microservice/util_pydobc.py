@@ -14,7 +14,6 @@ log_file_path = config['Log']['file_path']
               
 # Global Database Configuration
 CONNECTION_STRING = f"Driver={driver};Server={host};Database={database};user={user};password={password}"
-#DB_CONNECTION_STRING = f"Driver={driver};Server={host};Database={database};user={user};password={password}"
 #CONNECTION_STRING = "DRIVER=MariaDB ODBC 3.1 Driver;SERVER=10.10.7.64;DATABASE=test_database;UID=root;PWD=neural123"
 
 # Generic CRUD Operations with Exception Handling and Logging
@@ -88,4 +87,3 @@ def delete_record(table_name: str, filters: dict,log =None):
     except Exception as e:
         log.error(f"Failed to delete record from table '{table_name}' with filters: {filters}. Error: {e}")
         raise
-
