@@ -2,7 +2,7 @@ import pyodbc
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/workspaces/sam_assignment/user_microservice/config.ini')
+config.read('/home/neural/workarea/Aaditya/python/microservice_application/user_microservice/config.ini')
 
 host = config['Database']['host']
 database = config['Database']['db_name']
@@ -26,12 +26,15 @@ def execute_query(query: str, params=None,log=None):
                 # Determine query type
                 query_type = query.strip().split()[0].lower()
 
-                if query_type == "select":  # READ``
+                if query_type == "select":  # READ
                     result = cursor.fetchall()
-                    log.info(f"Query returned {len(result)} rows.")
-                    return result
+                    # Extract values from the result set
+                    values = [tuple(row) for row in result]
+                    log.info(f"Query returned {len(values)} rows.")
+                    return values
 
                 conn.commit()
+                return True
     except Exception as e:
         log.error(f"Query failed: {query} with params: {params}. Error: {e}")
         raise RuntimeError(f"Database operation failed: {e}") from e
@@ -39,11 +42,10 @@ def execute_query(query: str, params=None,log=None):
 # Create Record
 def create_record(table_name: str, data: dict,log = None):
     try:
-        columns = ", ".join(data.values())
+        columns = ", ".join(data.keys())
         placeholders = ", ".join("?" for _ in data.keys())
         query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
-        execute_query(query, tuple(data.values()), log)
-        log.info(f"Record created in table '{table_name}': {data}")
+        return execute_query(query, tuple(data.values()), log)
     except Exception as e:
         log.error(f"Failed to create record in table '{table_name}': {data}. Error: {e}")
         raise
@@ -58,7 +60,7 @@ def read_records(table_name: str, filters=None,log =None):
             base_query += f" WHERE {filter_clauses}"
             params = tuple(filters.values())
         log.info(f"Reading records from table '{table_name}' with filters: {filters}")
-        return execute_query(base_query, params)
+        return execute_query(base_query, params, log)
     except Exception as e:
         log.error(f"Failed to read records from table '{table_name}' with filters: {filters}. Error: {e}")
         raise
@@ -81,8 +83,8 @@ def delete_record(table_name: str, filters: dict,log =None):
         filter_clauses = " AND ".join(f"{value} = ?" for value in filters.values())
         query = f"DELETE FROM {table_name} WHERE {filter_clauses}"
         params = tuple(filters.values())
-        execute_query(query, params)
         log.info(f"Record deleted from table '{table_name}' with filters: {filters}")
+        return execute_query(query, params, log)
     except Exception as e:
         log.error(f"Failed to delete record from table '{table_name}' with filters: {filters}. Error: {e}")
         raise

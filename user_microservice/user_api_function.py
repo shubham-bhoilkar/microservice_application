@@ -13,13 +13,13 @@ def register_user_logic(user_data, log):
 
         if result:
             log.info(f"User registered successfully at user_api_function.")
+            return True
         else:
             log.error(f"User creation failed at user_api_function.")
-
-        return True
+            return False
 
     except Exception as e:
-        log.error(f"Error during creating user registration.{e}")
+        log.error(f"Error during creating user registration.{e}", exc_info = True)
         return False
 
 def view_records_logic(user_data, log):
@@ -36,7 +36,7 @@ def view_records_logic(user_data, log):
             return "No Data Found."
         
     except Exception as e:
-        log.error(f"Error retrieving user information: {e}")
+        log.error(f"Error retrieving user information: {e}", exc_info = True)
         return None
 
 def update_user_logic(user_data, log):
@@ -55,7 +55,7 @@ def update_user_logic(user_data, log):
         else:
             log.error(f"User updation failed at user_api_function.")
     except Exception as e:
-        log.error(f"Error during updating user details.")
+        log.error(f"Error during updating user details.", exc_info = True)
 
 def delete_user_logic(user_id: int, log):
     try:
@@ -66,5 +66,5 @@ def delete_user_logic(user_id: int, log):
         return result
     
     except Exception as e:
-        log.error(f"Error in delete_user_logic for user_id {user_id}: {e}")
+        log.error(f"Error in delete_user_logic for user_id {user_id}: {e}", exc_info = True)
         raise e
