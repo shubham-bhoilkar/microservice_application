@@ -10,7 +10,7 @@ driver = config['Database']['driver']
 user = config['Database']['user']
 password = config['Database']['password']
 log_file_path = config['Log']['file_path']
-              
+
 # Global Database Configuration
 CONNECTION_STRING = f"DRIVER={driver};SERVER={host};DATABASE={database};UID={user};PWD={password}"
 #CONNECTION_STRING = "DRIVER=MariaDB ODBC 3.1 Driver;SERVER=10.10.7.64;DATABASE=test_database;UID=root;PWD=neural123"
@@ -39,7 +39,7 @@ def execute_query(query: str, params=None,log=None):
 # Create Record
 def create_record(table_name: str, data: dict,log = None):
     try:
-        columns = ", ".join(data.keys())
+        columns = ", ".join(data.values())
         placeholders = ", ".join("?" for _ in data.keys())
         query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
         execute_query(query, tuple(data.values()), log)
@@ -78,7 +78,7 @@ def update_record(table_name: str, record_id: int, id_column: str = "id", data: 
 # Delete Record
 def delete_record(table_name: str, filters: dict,log =None):
     try:
-        filter_clauses = " AND ".join(f"{key} = ?" for key in filters.keys())
+        filter_clauses = " AND ".join(f"{value} = ?" for value in filters.values())
         query = f"DELETE FROM {table_name} WHERE {filter_clauses}"
         params = tuple(filters.values())
         execute_query(query, params)
