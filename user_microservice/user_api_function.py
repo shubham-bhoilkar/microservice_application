@@ -9,6 +9,7 @@ def register_user_logic(user_data, log):
             "phone": user_data.phone,
             "email": user_data.email,
             "designation": user_data.designation }
+        
         result = create_record("user_details", data, log)
 
         if result:
@@ -43,17 +44,20 @@ def update_user_logic(user_data, log):
     try:
         log.info(f"User data update request received by user: {user_data}")
         data = {
-            "first_name":user_data.first_name,
-            "last_name":user_data.last_name,
-            "phone":user_data.phone,
-            "email":user_data.email,
-            "designation":user_data.designation
+            "user_id":user_data.user_id,
+            "first_name":user_data.first_name ,
+            "last_name":user_data.last_name ,
+            "phone":user_data.phone ,
+            "email":user_data.email ,
+            "designation":user_data.designation 
         }
-        result = update_record("user_details",data.keys("user_id"),data,log)
+        
+        result = update_record("user_details", "user_id",data,log)
         if result:
             log.info(f"User updated succesfully at user_api_function.")
         else:
             log.error(f"User updation failed at user_api_function.")
+        return result
     except Exception as e:
         log.error(f"Error during updating user details.", exc_info = True)
 

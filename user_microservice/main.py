@@ -86,7 +86,7 @@ def update_user_details(user: update_user):
         else:
             return JSONResponse(
                 status_code=400,
-                content={"status": "failure", "message": "user detail update failed."})
+                content ={"status": "failure", "message": "user detail update failed."})
             
     except Exception as e:
         logger.error(f"Error during the update: {e}")

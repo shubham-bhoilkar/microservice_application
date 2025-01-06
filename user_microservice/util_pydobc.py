@@ -2,7 +2,7 @@ import pyodbc
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/home/neural/workarea/Aaditya/python/microservice_application/user_microservice/config.ini')
+config.read('/workspaces/sam_assignment/user_microservice/config.ini')
 
 host = config['Database']['host']
 database = config['Database']['db_name']
@@ -66,7 +66,7 @@ def read_records(table_name: str, filters=None,log =None):
         raise
 
 # Update Record
-def update_record(table_name: str, record_id: int, id_column: str = "id", data: dict = None,log =None):
+def update_record(table_name: str, record_id: int, id_column: str = "user_id", data: dict = None,log =None):
     try:
         set_clause = ", ".join(f"{key} = ?" for key in data.keys())
         query = f"UPDATE {table_name} SET {set_clause} WHERE {id_column} = ?"
