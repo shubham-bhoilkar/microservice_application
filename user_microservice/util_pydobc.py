@@ -71,8 +71,8 @@ def update_record(table_name: str, record_id: int, id_column: str = "id", data: 
         set_clause = ", ".join(f"{key} = ?" for key in data.keys())
         query = f"UPDATE {table_name} SET {set_clause} WHERE {id_column} = ?"
         params = (*data.values(), record_id)
-        execute_query(query, params)
         log.info(f"Record updated in table '{table_name}' with ID {record_id}: {data}")
+        return execute_query(query, params,log)
     except Exception as e:
         log.error(f"Failed to update record in table '{table_name}' with ID {record_id}: {data}. Error: {e}")
         raise
@@ -84,7 +84,8 @@ def delete_record(table_name: str, filters: dict,log =None):
         query = f"DELETE FROM {table_name} WHERE {filter_clauses}"
         params = tuple(filters.values())
         log.info(f"Record deleted from table '{table_name}' with filters: {filters}")
-        return execute_query(query, params, log)
+        return execute_query(query, params,log)
+        
     except Exception as e:
         log.error(f"Failed to delete record from table '{table_name}' with filters: {filters}. Error: {e}")
         raise

@@ -7,7 +7,7 @@ from logging.handlers import RotatingFileHandler
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/home/neural/workarea/Aaditya/python/microservice_application/user_microservice/config.ini')
+config.read('/workspaces/sam_assignment/user_microservice/config.ini')
 
 host = config['Server']['host']
 port = config['Server']['port']
@@ -63,7 +63,9 @@ def get_user_details(user_id: int):
         records = view_records_logic(user_id, logger)
         
         if records:
-            return records
+            return JSONResponse(
+                status_code=201,
+                content= {"status": "success", "data": records}) 
         else:
             return JSONResponse(
                 status_code=400,

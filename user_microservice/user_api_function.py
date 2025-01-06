@@ -49,7 +49,7 @@ def update_user_logic(user_data, log):
             "email":user_data.email,
             "designation":user_data.designation
         }
-        result = update_record("user_details",data.keys("user_id"),data)
+        result = update_record("user_details",data.keys("user_id"),data,log)
         if result:
             log.info(f"User updated succesfully at user_api_function.")
         else:
