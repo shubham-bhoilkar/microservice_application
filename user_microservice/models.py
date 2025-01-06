@@ -11,6 +11,7 @@ class view_user(BaseModel):
     user_id: int
     
 class update_user(BaseModel):
+    user_id:int
     first_name: str
     last_name: str
     phone: int

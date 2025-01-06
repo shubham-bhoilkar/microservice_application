@@ -187,3 +187,43 @@ Traceback (most recent call last):
   File "/usr/local/python/3.12.1/lib/python3.12/site-packages/pydantic/main.py", line 892, in __getattr__
     raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
 AttributeError: 'update_user' object has no attribute 'user_id'
+2025-01-06 13:53:33,178 - user_microservice - INFO - User data update request received by user: first_name='Shubham' last_name='Bhoilkar' phone=7045019544 email='sam@99' designation='AI Developer'
+2025-01-06 13:53:39,761 - user_microservice - ERROR - Error during updating user details.
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 47, in update_user_logic
+    "user_id":user_data.user_id,
+              ^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/pydantic/main.py", line 892, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'update_user' object has no attribute 'user_id'
+2025-01-06 14:00:17,149 - user_microservice - INFO - User data update request received by user: user_id=1 first_name='Shubham' last_name='Bhoilkar' phone=99 email='sam@99' designation='Developer'
+2025-01-06 14:00:17,149 - user_microservice - ERROR - Error during updating user details.
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 55, in update_user_logic
+    result = update_record("user_details",data.keys[0], "user_id",data,log)
+                                          ~~~~~~~~~^^^
+TypeError: 'builtin_function_or_method' object is not subscriptable
+string2025-01-06 14:02:22,740 - user_microservice - INFO - User data update request received by user: user_id=1 first_name='Shubham' last_name='Bhoilkar' phone=99 email='sam@99' designation='Developer'
+2025-01-06 14:02:22,741 - user_microservice - INFO - Record updated in table 'user_details' with ID 1: {'user_id': 1, 'first_name': 'Shubham', 'last_name': 'Bhoilkar', 'phone': 99, 'email': 'sam@99', 'designation': 'Developer'}
+2025-01-06 14:02:22,741 - user_microservice - INFO - Executing query: UPDATE user_details SET user_id = ?, first_name = ?, last_name = ?, phone = ?, email = ?, designation = ? WHERE user_id = ? with params: (1, 'Shubham', 'Bhoilkar', 99, 'sam@99', 'Developer', 1)
+2025-01-06 14:02:22,744 - user_microservice - ERROR - Query failed: UPDATE user_details SET user_id = ?, first_name = ?, last_name = ?, phone = ?, email = ?, designation = ? WHERE user_id = ? with params: (1, 'Shubham', 'Bhoilkar', 99, 'sam@99', 'Developer', 1). Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-06 14:02:22,744 - user_microservice - ERROR - Failed to update record in table 'user_details' with ID 1: {'user_id': 1, 'first_name': 'Shubham', 'last_name': 'Bhoilkar', 'phone': 99, 'email': 'sam@99', 'designation': 'Developer'}. Error: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-06 14:02:22,744 - user_microservice - ERROR - Error during updating user details.
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 22, in execute_query
+    with pyodbc.connect(CONNECTION_STRING) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 55, in update_user_logic
+    result = update_record("user_details",user_data.user_id, "user_id",data,log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 75, in update_record
+    return execute_query(query, params,log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
+    raise RuntimeError(f"Database operation failed: {e}") from e
+RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
