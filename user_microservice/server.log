@@ -227,3 +227,177 @@ Traceback (most recent call last):
   File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
     raise RuntimeError(f"Database operation failed: {e}") from e
 RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:10,340 - user_microservice - INFO - User data delete request received by user id: 1
+2025-01-07 05:49:10,341 - user_microservice - INFO - Record deleted from table 'user_details' with filters: {'user_id': 1}
+2025-01-07 05:49:10,341 - user_microservice - INFO - Executing query: DELETE FROM user_details WHERE 1 = ? with params: (1,)
+2025-01-07 05:49:10,344 - user_microservice - ERROR - Query failed: DELETE FROM user_details WHERE 1 = ? with params: (1,). Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:10,344 - user_microservice - ERROR - Failed to delete record from table 'user_details' with filters: {'user_id': 1}. Error: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:10,344 - user_microservice - ERROR - Error in delete_user_logic for user_id 1: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 22, in execute_query
+    with pyodbc.connect(CONNECTION_STRING) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 68, in delete_user_logic
+    result = delete_record("user_details", filters, log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 87, in delete_record
+    return execute_query(query, params,log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
+    raise RuntimeError(f"Database operation failed: {e}") from e
+RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:10,345 - user_microservice - ERROR - Error deleting user with user_id 1: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:35,084 - user_microservice - INFO - User data delete request received by user id: 1
+2025-01-07 05:49:35,084 - user_microservice - INFO - Record deleted from table 'user_details' with filters: {'user_id': 1}
+2025-01-07 05:49:35,084 - user_microservice - INFO - Executing query: DELETE FROM user_details WHERE 1 = ? with params: (1,)
+2025-01-07 05:49:35,084 - user_microservice - ERROR - Query failed: DELETE FROM user_details WHERE 1 = ? with params: (1,). Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:35,084 - user_microservice - ERROR - Failed to delete record from table 'user_details' with filters: {'user_id': 1}. Error: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:35,085 - user_microservice - ERROR - Error in delete_user_logic for user_id 1: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 22, in execute_query
+    with pyodbc.connect(CONNECTION_STRING) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 68, in delete_user_logic
+    result = delete_record("user_details", filters, log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 87, in delete_record
+    return execute_query(query, params,log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
+    raise RuntimeError(f"Database operation failed: {e}") from e
+RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:35,085 - user_microservice - ERROR - Error deleting user with user_id 1: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:55,257 - user_microservice - INFO - User data delete request received by user id: 1
+2025-01-07 05:49:55,257 - user_microservice - INFO - Record deleted from table 'user_details' with filters: {'user_id': 1}
+2025-01-07 05:49:55,257 - user_microservice - INFO - Executing query: DELETE FROM user_details WHERE 1 = ? with params: (1,)
+2025-01-07 05:49:55,257 - user_microservice - ERROR - Query failed: DELETE FROM user_details WHERE 1 = ? with params: (1,). Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:55,258 - user_microservice - ERROR - Failed to delete record from table 'user_details' with filters: {'user_id': 1}. Error: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:55,258 - user_microservice - ERROR - Error in delete_user_logic for user_id 1: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 22, in execute_query
+    with pyodbc.connect(CONNECTION_STRING) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 68, in delete_user_logic
+    result = delete_record("user_details", filters, log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 87, in delete_record
+    return execute_query(query, params,log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
+    raise RuntimeError(f"Database operation failed: {e}") from e
+RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:55,258 - user_microservice - ERROR - Error deleting user with user_id 1: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:56,159 - user_microservice - INFO - User data delete request received by user id: 1
+2025-01-07 05:49:56,160 - user_microservice - INFO - Record deleted from table 'user_details' with filters: {'user_id': 1}
+2025-01-07 05:49:56,160 - user_microservice - INFO - Executing query: DELETE FROM user_details WHERE 1 = ? with params: (1,)
+2025-01-07 05:49:56,160 - user_microservice - ERROR - Query failed: DELETE FROM user_details WHERE 1 = ? with params: (1,). Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:56,160 - user_microservice - ERROR - Failed to delete record from table 'user_details' with filters: {'user_id': 1}. Error: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:56,160 - user_microservice - ERROR - Error in delete_user_logic for user_id 1: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 22, in execute_query
+    with pyodbc.connect(CONNECTION_STRING) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 68, in delete_user_logic
+    result = delete_record("user_details", filters, log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 87, in delete_record
+    return execute_query(query, params,log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
+    raise RuntimeError(f"Database operation failed: {e}") from e
+RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:49:56,161 - user_microservice - ERROR - Error deleting user with user_id 1: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:51:25,551 - user_microservice - INFO - User data delete request received by user id: 1
+2025-01-07 05:51:25,552 - user_microservice - INFO - Record deleted from table 'user_details' with filters: {'user_id': 1}
+2025-01-07 05:51:25,552 - user_microservice - INFO - Executing query: DELETE FROM user_details WHERE 1 = ? with params: (1,)
+2025-01-07 05:51:25,555 - user_microservice - ERROR - Query failed: DELETE FROM user_details WHERE 1 = ? with params: (1,). Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:51:25,557 - user_microservice - ERROR - Failed to delete record from table 'user_details' with filters: {'user_id': 1}. Error: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:51:25,557 - user_microservice - ERROR - Error in delete_user_logic for user_id 1: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 22, in execute_query
+    with pyodbc.connect(CONNECTION_STRING) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 68, in delete_user_logic
+    result = delete_record("user_details", filters, log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 87, in delete_record
+    return execute_query(query, params,log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
+    raise RuntimeError(f"Database operation failed: {e}") from e
+RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:51:45,778 - user_microservice - INFO - User data delete request received by user id: 1
+2025-01-07 05:51:45,778 - user_microservice - INFO - Record deleted from table 'user_details' with filters: {'user_id': 1}
+2025-01-07 05:51:45,778 - user_microservice - INFO - Executing query: DELETE FROM user_details WHERE 1 = ? with params: (1,)
+2025-01-07 05:51:45,778 - user_microservice - ERROR - Query failed: DELETE FROM user_details WHERE 1 = ? with params: (1,). Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:51:45,778 - user_microservice - ERROR - Failed to delete record from table 'user_details' with filters: {'user_id': 1}. Error: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 05:51:45,779 - user_microservice - ERROR - Error in delete_user_logic for user_id 1: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 22, in execute_query
+    with pyodbc.connect(CONNECTION_STRING) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/main.py", line 98, in delete_user
+    result = delete_user_logic(user_id, logger)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 74, in delete_user_logic
+    raise e
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 68, in delete_user_logic
+    result = delete_record("user_details", filters, log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 87, in delete_record
+    return execute_query(query, params,log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
+    raise RuntimeError(f"Database operation failed: {e}") from e
+RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 22, in execute_query
+    with pyodbc.connect(CONNECTION_STRING) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 68, in delete_user_logic
+    result = delete_record("user_details", filters, log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 87, in delete_record
+    return execute_query(query, params,log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
+    raise RuntimeError(f"Database operation failed: {e}") from e
+RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
