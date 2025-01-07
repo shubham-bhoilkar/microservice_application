@@ -40,11 +40,10 @@ def view_records_logic(user_data, log):
         log.error(f"Error retrieving user information: {e}", exc_info = True)
         return None
 
-def update_user_logic(user_data, log):
+def update_user_logic(user_data,user_id, log):
     try:
         log.info(f"User data update request received by user: {user_data}")
         data = {
-            "user_id":user_data.user_id,
             "first_name":user_data.first_name ,
             "last_name":user_data.last_name ,
             "phone":user_data.phone ,
@@ -52,7 +51,7 @@ def update_user_logic(user_data, log):
             "designation":user_data.designation 
         }
         
-        result = update_record("user_details",user_data.user_id, "user_id",data,log)
+        result = update_record("user_details",user_id, "user_id",data,log)
         if result:
             log.info(f"User updated succesfully at user_api_function.")
         else:

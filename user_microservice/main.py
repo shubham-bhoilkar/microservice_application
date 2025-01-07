@@ -7,7 +7,7 @@ from logging.handlers import RotatingFileHandler
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/workspaces/sam_assignment/user_microservice/config.ini')
+config.read('/home/neural/workarea/Aaditya/python/microservice_application/user_microservice/config.ini')
 
 host = config['Server']['host']
 port = config['Server']['port']
@@ -78,8 +78,8 @@ def get_user_details(user_id: int):
 @app.put("/update_user_details/{user_id}")
 def update_user_details(user_id: int,user: update_user):
     try:
-        result = update_user_logic(user, logger)
-        if result['status']=='success':
+        result = update_user_logic(user, user_id, logger)
+        if result:
             return JSONResponse(
                 status_code=200,
                 content ={"status": "success", "message": "user details updated."})
