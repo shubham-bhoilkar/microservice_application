@@ -75,13 +75,13 @@ def get_user_details(user_id: int):
         logger.error(f"Error reading records from table 'user_details': {e}")
         raise HTTPException(status_code=500, detail=f"Error reading records from table 'user_details'.")
 
-@app.post("/update_user_details")
-def update_user_details(user: update_user):
+@app.put("/update_user_details/{user_id}")
+def update_user_details(user_id: int,user: update_user):
     try:
         result = update_user_logic(user, logger)
-        if result:
+        if result['status']=='success':
             return JSONResponse(
-                status_code=201,
+                status_code=200,
                 content ={"status": "success", "message": "user details updated."})
         else:
             return JSONResponse(

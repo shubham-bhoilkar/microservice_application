@@ -401,3 +401,52 @@ Traceback (most recent call last):
   File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
     raise RuntimeError(f"Database operation failed: {e}") from e
 RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 07:20:31,086 - user_microservice - INFO - User data update request received by user: user_id=1 first_name='string' last_name='string' phone=0 email='string' designation='string'
+2025-01-07 07:20:31,086 - user_microservice - INFO - Record updated in table 'user_details' with ID 1: {'user_id': 1, 'first_name': 'string', 'last_name': 'string', 'phone': 0, 'email': 'string', 'designation': 'string'}
+2025-01-07 07:20:31,088 - user_microservice - INFO - Executing query: UPDATE user_details SET user_id = ?, first_name = ?, last_name = ?, phone = ?, email = ?, designation = ? WHERE user_id = ? with params: (1, 'string', 'string', 0, 'string', 'string', 1)
+2025-01-07 07:20:31,090 - user_microservice - ERROR - Query failed: UPDATE user_details SET user_id = ?, first_name = ?, last_name = ?, phone = ?, email = ?, designation = ? WHERE user_id = ? with params: (1, 'string', 'string', 0, 'string', 'string', 1). Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 07:20:31,090 - user_microservice - ERROR - Failed to update record in table 'user_details' with ID 1: {'user_id': 1, 'first_name': 'string', 'last_name': 'string', 'phone': 0, 'email': 'string', 'designation': 'string'}. Error: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 07:20:31,091 - user_microservice - ERROR - Error during updating user details.
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 22, in execute_query
+    with pyodbc.connect(CONNECTION_STRING) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 55, in update_user_logic
+    result = update_record("user_details",user_data.user_id, "user_id",data,log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 75, in update_record
+    return execute_query(query, params,log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
+    raise RuntimeError(f"Database operation failed: {e}") from e
+RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 07:21:13,608 - user_microservice - ERROR - Error during the update: 'NoneType' object is not subscriptable
+2025-01-07 07:21:45,364 - user_microservice - INFO - User data update request received by user: user_id=1 first_name='string' last_name='string' phone=0 email='string' designation='string'
+2025-01-07 07:22:06,062 - user_microservice - INFO - Record updated in table 'user_details' with ID 1: {'user_id': 1, 'first_name': 'string', 'last_name': 'string', 'phone': 0, 'email': 'string', 'designation': 'string'}
+2025-01-07 07:22:06,062 - user_microservice - INFO - Executing query: UPDATE user_details SET user_id = ?, first_name = ?, last_name = ?, phone = ?, email = ?, designation = ? WHERE user_id = ? with params: (1, 'string', 'string', 0, 'string', 'string', 1)
+2025-01-07 07:22:06,063 - user_microservice - ERROR - Query failed: UPDATE user_details SET user_id = ?, first_name = ?, last_name = ?, phone = ?, email = ?, designation = ? WHERE user_id = ? with params: (1, 'string', 'string', 0, 'string', 'string', 1). Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 07:22:06,063 - user_microservice - ERROR - Failed to update record in table 'user_details' with ID 1: {'user_id': 1, 'first_name': 'string', 'last_name': 'string', 'phone': 0, 'email': 'string', 'designation': 'string'}. Error: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-07 07:22:07,270 - user_microservice - ERROR - Error during updating user details.
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 22, in execute_query
+    with pyodbc.connect(CONNECTION_STRING) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/user_api_function.py", line 55, in update_user_logic
+    result = update_record("user_details",user_data.user_id, "user_id",data,log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 75, in update_record
+    return execute_query(query, params,log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
+    raise RuntimeError(f"Database operation failed: {e}") from e
+RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
