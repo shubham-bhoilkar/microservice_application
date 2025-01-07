@@ -1,4 +1,7 @@
 from util_pydobc import create_record , read_records , update_record ,delete_record
+import nsq
+import json
+
 
 def register_user_logic(user_data, log):
     try:
