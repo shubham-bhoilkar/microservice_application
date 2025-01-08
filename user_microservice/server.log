@@ -450,3 +450,15 @@ Traceback (most recent call last):
   File "/workspaces/sam_assignment/user_microservice/util_pydobc.py", line 40, in execute_query
     raise RuntimeError(f"Database operation failed: {e}") from e
 RuntimeError: Database operation failed: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'MariaDB ODBC 3.1 Driver' : file not found (0) (SQLDriverConnect)")
+2025-01-08 06:32:03,294 - user_microservice - ERROR - Error processing message: module 'nsq' has no attribute 'Writer'
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/caller.py", line 16, in register_user_caller
+    writer = nsq.Writer(host)  # Address of NSQ producer
+             ^^^^^^^^^^
+AttributeError: module 'nsq' has no attribute 'Writer'
+2025-01-08 06:42:48,601 - user_microservice - ERROR - Error processing message: module 'nsq' has no attribute 'Writer'
+Traceback (most recent call last):
+  File "/workspaces/sam_assignment/user_microservice/caller.py", line 16, in register_user_caller
+    writer = nsq.Writer(host)  # Address of NSQ producer
+             ^^^^^^^^^^
+AttributeError: module 'nsq' has no attribute 'Writer'

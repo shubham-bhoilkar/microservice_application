@@ -19,4 +19,21 @@ def register_user_caller(message, logger):
     except Exception as e:
         logger.error(f"Error processing message: {e}", exc_info = True)
         return False
-    
+
+def update_user_caller(message, logger):
+    try:
+        writer = nsq.Writer(host)  # Address of NSQ producer
+        writer.pub("update-user", message.encode('utf-8'))
+        return True
+    except Exception as e:
+        logger.error(f"Error processing message: {e}", exc_info = True)
+        return False
+
+def delete_user_caller(message, logger):
+    try:
+        writer = nsq.Writer(host)  # Address of NSQ producer
+        writer.pub("regisetr-user", message.encode('utf-8'))
+        return True
+    except Exception as e:
+        logger.error(f"Error processing message: {e}", exc_info = True)
+        return False

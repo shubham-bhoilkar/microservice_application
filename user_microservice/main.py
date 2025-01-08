@@ -1,8 +1,7 @@
 from fastapi import FastAPI , HTTPException
 from fastapi.responses import JSONResponse
 from models import create_user ,update_user 
-from user_api_function import register_user_logic, view_records_logic ,update_user_logic ,delete_user_logic
-from caller import register_user_caller
+from caller import register_user_caller , update_user_caller , delete_user_caller
 import logging
 from logging.handlers import RotatingFileHandler
 import configparser
@@ -23,7 +22,7 @@ def setup_logging(file_path):
     file_handler.setLevel(logging.DEBUG)
     formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    )           
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
@@ -44,12 +43,12 @@ def register_user(user: create_user):
         if result:
             return JSONResponse(
                 status_code=201,
-                content ={"status":"success","message":"User Creation request sent to NSQ."})
+                content ={"status":"success","message":user})
         else:
             return JSONResponse(
                 status_code=400,
                 content ={"status":"failure", "message": "User Creation request not sent to NSQ."})
-        
+            
     except Exception as e:
         logger.error(f"Error during user registration: {e}",exc_info =True)
         raise HTTPException(status_code= 500, detail="Internal Server Error.")
@@ -57,7 +56,7 @@ def register_user(user: create_user):
 @app.get("/get_user_details/{user_id}")
 def get_user_details(user_id: int):
     try:
-        records = view_records_logic(user_id, logger)
+        records = update_user_caller(user_id, logger)
         
         if records:
             return JSONResponse(
@@ -75,7 +74,7 @@ def get_user_details(user_id: int):
 @app.put("/update_user_details/{user_id}")
 def update_user_details(user_id: int,user: update_user):
     try:
-        result = update_user_logic(user, user_id, logger)
+        result = update_user_caller(user, user_id, logger)
         if result:
             return JSONResponse(
                 status_code=200,
@@ -92,7 +91,7 @@ def update_user_details(user_id: int,user: update_user):
 @app.delete("/delete_user/{user_id}")
 def delete_user(user_id: int):
     try:
-        result = delete_user_logic(user_id, logger)
+        result = delete_user_caller(user_id, logger)
         
         if result:
             return JSONResponse(

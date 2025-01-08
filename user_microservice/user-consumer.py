@@ -1,5 +1,5 @@
 from caller import register_user_caller
-from user_api_function import register_user_logic
+from user_api_function import register_user_logic , update_user_logic , delete_user_logic
 import nsq
 import json
 import configparser
@@ -32,7 +32,7 @@ nsqlookupd_port= config['NSQ']['nsqlookupd_port']
 #         logger.error(f"Unexpected error while setting up NSQ Consumer: {e}", exc_info=True)
 
 
-def nsq_subscription_handler(queue_name, callback):
+def nsq_subscription_handler(queue_name, callback,log):
     """
     Function to handle NSQ topic subscription.
     
@@ -41,7 +41,7 @@ def nsq_subscription_handler(queue_name, callback):
         callback (function): The function that will process the messages.
     """
     
-    def message_handler(message):
+    def message_handler(message,log):
         """ This function is invoked when a message is received. """
         try:
             # Call the provided callback function with the message body.
@@ -49,7 +49,7 @@ def nsq_subscription_handler(queue_name, callback):
             # After processing the message, indicate successful handling.
             return message.ack()
         except Exception as e:
-            logging.error(f"Error processing message: {e}")
+            log.error(f"Error processing message: {e}")
             return message.requeue()
 
     # Define the NSQ connection options.
@@ -67,12 +67,12 @@ def nsq_subscription_handler(queue_name, callback):
 
     # Run the reader to listen for incoming messages.
     try:
-        logging.info(f"Subscribing to queue: {queue_name} on topic: 'your_topic_name'")
+        log.info(f"Subscribing to queue: {queue_name} on topic: 'your_topic_name'")
         nsq.run()
     except KeyboardInterrupt:
-        logging.info("Subscription interrupted by user.")
+        log.info("Subscription interrupted by user.")
     except Exception as e:
-        logging.error(f"Error during NSQ subscription: {e}")
+        log.error(f"Error during NSQ subscription: {e}")
         
 
 def register_user(message,log):
@@ -86,12 +86,37 @@ def register_user(message,log):
         else:
             log.error(f"Failed to register user, requeueing message.",exc_info =True)
 
-    except json.JSONDecodeError as json_error:
-        log.error(f"Error decoding JSON message: {json_error}", exc_info=True)
-        message.requeue()  # Requeue if the message is malformed
     except Exception as e:
         log.error(f"Error processing message: {e}", exc_info=True)
         message.requeue()  # Requeue if any other exception occurs
+        
+def update_user_data(message,log):
+    try:
+        user_data = json.loads(message.body)
+
+        success = update_user_logic(user_data, log)
+
+        if success:
+            log.info(f"User data update succesfully, requeueing message.")
+        else:
+            log.error(f"Failed to update user data, requeueing message.",exc_info =True)
+
+    except Exception as e:
+        log.error(f"Error processing message: {e}",exc_info =True)
+
+def delete_user_data(message,log):
+    try:
+        user_data = json.loads(message.body)
+
+        success = delete_user_logic(user_data, log)
+
+        if success:
+            log.info(f"User data deleted succesfully, requeueing message.")
+        else:
+            log.error(f"Failed to delete user data, requeueing message.",exc_info =True)
+
+    except Exception as e:
+        log.error(f"Error processing message: {e}",exc_info =True)
 
 
 if __name__ == "__main__":
@@ -102,4 +127,10 @@ if __name__ == "__main__":
 
     if queue_name == "register-user":
         nsq_subscription_handler(queue_name, register_user)
-    
+    elif queue_name == "-update_record":
+        nsq_subscription_handler(queue_name, update_user_data)
+    elif queue_name == "delete-user_record":
+        nsq_subscription_handler(queue_name, delete_user_data)
+    else:
+#        log.error(f"{queue_name} not found")
+        print(f"{queue_name} not found.")
