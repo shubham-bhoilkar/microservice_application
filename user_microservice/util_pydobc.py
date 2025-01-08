@@ -2,7 +2,7 @@ import pyodbc
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/workspaces/sam_assignment/user_microservice/config.ini')
+config.read('/workspaces/sam_assignment/config.ini')
 
 host = config['Database']['host']
 database = config['Database']['db_name']

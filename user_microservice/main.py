@@ -9,7 +9,7 @@ import nsq
 
 config = configparser.ConfigParser()
 #config.read('/home/neural/workarea/Aaditya/python/microservice_application/user_microservice/config.ini')
-config.read('/workspaces/sam_assignment/user_microservice/config.ini')
+config.read('/workspaces/sam_assignment/config.ini')
 
 host = config['Server']['host']
 port = config['Server']['port']

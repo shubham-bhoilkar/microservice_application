@@ -6,7 +6,7 @@ import configparser
 
 config = configparser.ConfigParser()
 #config.read('/home/neural/workarea/Aaditya/python/microservice_application/user_microservice/config.ini')
-config.read('/workspaces/sam_assignment/user_microservice/config.ini')
+config.read('/workspaces/sam_assignment/config.ini')
 
 nsqd_port =config['NSQ']['nsqd_port']
 nsqlookupd_port= config['NSQ']['nsqlookupd_port']
