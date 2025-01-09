@@ -8,13 +8,17 @@ from logging.handlers import RotatingFileHandler
 import configparser
 import redis
 
+
 config = configparser.ConfigParser()
-#config.read('/home/neural/workarea/Aaditya/python/microservice_application/user_microservice/config.ini')
 config.read('/home/neuralit/shubham_workarea/python/microservice_application/config.ini')
-#/home/neuralit/shubham_workarea/python/microservice_application/user_microservice/main.py
+
 host = config['Server']['host']
 port = config['Server']['port']
 log_file_path = config['Log']['file_path']
+redis_host =config['Redis']['host']
+redis_port =config['Redis']['port']
+redis_db =config['Redis']['db']
+redis_password = config['Redis'].get('password',None)
 
 def setup_logging(file_path):
     logger = logging.getLogger('user_microservice')
@@ -30,6 +34,9 @@ def setup_logging(file_path):
     return logger
 
 logger = setup_logging(log_file_path)
+
+# try:
+#     redis_client =redis.Redis(host= redis_host, port =redis_port, db= redis_db,)
 
 app = FastAPI()
 
@@ -88,6 +95,11 @@ def update_user_details(user_id: int,user: update_user):
     except Exception as e:
         logger.error(f"Error during the update: {e}",exc_info =True)
         raise HTTPException(status_code = 500, detail="Internal Server Error.")
+'''
+sudo apt-get update
+sudo apt-get install iputils-ping
+ping 10.10.7.64
+'''
 
 @app.delete("/delete_user/{user_id}")
 def delete_user(user_id: int):
@@ -110,3 +122,6 @@ def delete_user(user_id: int):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app=app,host=host, port=eval(port))
+
+#curl -d "Hello, NSQ!" "http://10.10.7.64:4151/pub?topic=update-user"
+#curl -d "Hello, NSQ!" "http://10.10.7.64:4151/pub?topic=delete-user"

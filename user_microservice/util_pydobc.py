@@ -2,7 +2,7 @@ import pyodbc
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/workspaces/sam_assignment/config.ini')
+config.read('/home/neuralit/shubham_workarea/python/microservice_application/config.ini')
 
 host = config['Database']['host']
 database = config['Database']['db_name']
@@ -13,7 +13,7 @@ log_file_path = config['Log']['file_path']
 
 # Global Database Configuration
 CONNECTION_STRING = f"DRIVER={driver};SERVER={host};DATABASE={database};UID={user};PWD={password}"
-#CONNECTION_STRING = "DRIVER=MariaDB ODBC 3.1 Driver;SERVER=10.10.7.64;DATABASE=test_database;UID=root;PWD=neural123"
+#CONNECTION_STRING = "DRIVER=MariaDB ODBC 3.1 Driver;SERVER=10.10.6.54;DATABASE=sam_demo;UID=root;PWD=neural123"
 
 # Generic CRUD Operations with Exception Handling and Logging
 def execute_query(query: str, params=None,log=None):
@@ -51,7 +51,7 @@ def create_record(table_name: str, data: dict,log = None):
         raise
 
 # Read Records
-def read_records(table_name: str, filters=None,log =None):
+def read_records(table_name: str, filters:dict,log =None):
     try:
         base_query = f"SELECT * FROM {table_name}"
         params = ()
