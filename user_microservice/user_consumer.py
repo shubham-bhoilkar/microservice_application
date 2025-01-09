@@ -1,136 +1,91 @@
-from caller import register_user_caller
-from user_api_function import register_user_logic , update_user_logic , delete_user_logic
-import nsq
-import json
+import pyodbc
 import configparser
 
 config = configparser.ConfigParser()
-#config.read('/home/neural/workarea/Aaditya/python/microservice_application/user_microservice/config.ini')
-config.read('/workspaces/sam_assignment/config.ini')
+config.read('/home/neuralit/shubham_workarea/python/microservice_application/config.ini')
 
-nsqd_port =config['NSQ']['nsqd_port']
-nsqlookupd_port= config['NSQ']['nsqlookupd_port']
-# Set up the NSQ Consumer (subscriber) to listen to the 'register-user' topic
-# def register_nsq_consumer(logger):
-#     try:
-#         # Set up the NSQ reader (consumer) to listen to the 'register-user' topic
-#         nsq_reader = nsq.Reader(
-#             message_handler=register_user_caller,  # The handler that will process each message
-#             nsqd_tcp_addresses=nsqd_port,  # Update with your NSQ server address
-#             topic='regisetr-user',  # The topic to subscribe to
-#             channel='user-register-channel',  # The channel (should be unique)
-#             lookupd_http_addresses=nsqlookupd_port  # Adjust if you're using NSQLookupd
-#         )
+host = config['Database']['host']
+database = config['Database']['db_name']
+driver = config['Database']['driver']
+user = config['Database']['user']
+password = config['Database']['password']
+log_file_path = config['Log']['file_path']
 
-#         # Start listening for messages from the NSQ topic
-#         nsq.run() 
-#         logger.info("NSQ Consumer started...")
+# Global Database Configuration
+CONNECTION_STRING = f"DRIVER={driver};SERVER={host};DATABASE={database};UID={user};PWD={password}"
+#CONNECTION_STRING = "DRIVER=MariaDB ODBC 3.1 Driver;SERVER=10.10.7.64;DATABASE=test_database;UID=root;PWD=neural123"
 
-#     except nsq.NSQError as nsq_error:
-#         logger.error(f"NSQ error occurred: {nsq_error}", exc_info=True)
-#     except Exception as e:
-#         logger.error(f"Unexpected error while setting up NSQ Consumer: {e}", exc_info=True)
-
-
-def nsq_subscription_handler(queue_name, callback,log):
-    """
-    Function to handle NSQ topic subscription.
-    
-    Args:
-        queue_name (str): The name of the queue to listen on.
-        callback (function): The function that will process the messages.
-    """
-    
-    def message_handler(message,log):
-        """ This function is invoked when a message is received. """
-        try:
-            # Call the provided callback function with the message body.
-            callback(message)
-            # After processing the message, indicate successful handling.
-            return message.ack()
-        except Exception as e:
-            log.error(f"Error processing message: {e}")
-            return message.requeue()
-
-    # Define the NSQ connection options.
-    nsq_address = '127.0.0.1'  # NSQ server address, change this as necessary.
-    nsq_port = 4150            # NSQ default port.
-
-    # Create an NSQ reader to subscribe to the topic.
-    reader = nsq.Reader(
-        message_handler=message_handler,    # Handle the messages.
-        topic='your_topic_name',            # The topic to subscribe to (change this as needed).
-        channel=queue_name,                 # Use the provided queue name for the subscription.
-        nsqd_tcp_addresses=[f'{nsq_address}:{nsq_port}'],  # Provide NSQ server address.
-        max_in_flight=10                   # Max number of messages to be processed in parallel.
-    )
-
-    # Run the reader to listen for incoming messages.
+# Generic CRUD Operations with Exception Handling and Logging
+def execute_query(query: str, params=None,log=None):
     try:
-        log.info(f"Subscribing to queue: {queue_name} on topic: 'your_topic_name'")
-        nsq.run()
-    except KeyboardInterrupt:
-        log.info("Subscription interrupted by user.")
+        log.info(f"Executing query: {query} with params: {params}")
+        with pyodbc.connect(CONNECTION_STRING) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, params or ())
+
+                # Determine query type
+                query_type = query.strip().split()[0].lower()
+
+                if query_type == "select":  # READ
+                    result = cursor.fetchall()
+                    # Extract values from the result set
+                    values = [tuple(row) for row in result]
+                    log.info(f"Query returned {len(values)} rows.")
+                    return values
+
+                conn.commit()
+                return True
     except Exception as e:
-        log.error(f"Error during NSQ subscription: {e}")
+        log.error(f"Query failed: {query} with params: {params}. Error: {e}")
+        raise RuntimeError(f"Database operation failed: {e}") from e
+
+# Create Record
+def create_record(table_name: str, data: dict,log = None):
+    try:
+        columns = ", ".join(data.keys())
+        placeholders = ", ".join("?" for _ in data.keys())
+        query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+        return execute_query(query, tuple(data.values()), log)
+    except Exception as e:
+        log.error(f"Failed to create record in table '{table_name}': {data}. Error: {e}")
+        raise
+
+# Read Records
+def read_records(table_name: str, filters=None,log =None):
+    try:
+        base_query = f"SELECT * FROM {table_name}"
+        params = ()
+        if filters:
+            filter_clauses = " AND ".join(f"{key} = ?" for key in filters.keys())
+            base_query += f" WHERE {filter_clauses}"
+            params = tuple(filters.values())
+        log.info(f"Reading records from table '{table_name}' with filters: {filters}")
+        return execute_query(base_query, params, log)
+    except Exception as e:
+        log.error(f"Failed to read records from table '{table_name}' with filters: {filters}. Error: {e}")
+        raise
+
+# Update Record
+def update_record(table_name: str, record_id: int, id_column: str = "user_id", data: dict = None,log =None):
+    try:
+        set_clause = ", ".join(f"{key} = ?" for key in data.keys())
+        query = f"UPDATE {table_name} SET {set_clause} WHERE {id_column} = ?"
+        params = (*data.values(), record_id)
+        log.info(f"Record updated in table '{table_name}' with ID {record_id}: {data}")
+        return execute_query(query, params,log)
+    except Exception as e:
+        log.error(f"Failed to update record in table '{table_name}' with ID {record_id}: {data}. Error: {e}")
+        raise
+
+# Delete Record
+def delete_record(table_name: str, filters: dict,log =None):
+    try:
+        filter_clauses = " AND ".join(f"{value} = ?" for value in filters.values())
+        query = f"DELETE FROM {table_name} WHERE {filter_clauses}"
+        params = tuple(filters.values())
+        log.info(f"Record deleted from table '{table_name}' with filters: {filters}")
+        return execute_query(query, params,log)
         
-
-def register_user(message,log):
-    try:
-        user_data = json.loads(message.body)
-
-        success = register_user_logic(user_data, log)  # Assuming `log` is available globally or passed
-
-        if success:
-            log.info(f"User registration succesful, requeueing message.")
-        else:
-            log.error(f"Failed to register user, requeueing message.",exc_info =True)
-
     except Exception as e:
-        log.error(f"Error processing message: {e}", exc_info=True)
-        message.requeue()  # Requeue if any other exception occurs
-        
-def update_user_data(message,log):
-    try:
-        user_data = json.loads(message.body)
-
-        success = update_user_logic(user_data, log)
-
-        if success:
-            log.info(f"User data update succesfully, requeueing message.")
-        else:
-            log.error(f"Failed to update user data, requeueing message.",exc_info =True)
-
-    except Exception as e:
-        log.error(f"Error processing message: {e}",exc_info =True)
-
-def delete_user_data(message,log):
-    try:
-        user_data = json.loads(message.body)
-
-        success = delete_user_logic(user_data, log)
-
-        if success:
-            log.info(f"User data deleted succesfully, requeueing message.")
-        else:
-            log.error(f"Failed to delete user data, requeueing message.",exc_info =True)
-
-    except Exception as e:
-        log.error(f"Error processing message: {e}",exc_info =True)
-
-
-if __name__ == "__main__":
-    # Run the consumer
-    # register_nsq_consumer()
-    # read system argument and subscription to a topic and assign callback function
-    queue_name = "register-user"
-
-    if queue_name == "register-user":
-        nsq_subscription_handler(queue_name, register_user)
-    elif queue_name == "-update_record":
-        nsq_subscription_handler(queue_name, update_user_data)
-    elif queue_name == "delete-user_record":
-        nsq_subscription_handler(queue_name, delete_user_data)
-    else:
-#        log.error(f"{queue_name} not found")
-        print(f"{queue_name} not found.")
+        log.error(f"Failed to delete record from table '{table_name}' with filters: {filters}. Error: {e}")
+        raise

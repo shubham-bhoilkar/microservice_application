@@ -1,16 +1,17 @@
 from fastapi import FastAPI , HTTPException
 from fastapi.responses import JSONResponse
 from models import create_user ,update_user 
+from user_api_function import view_records_logic
 from caller import register_user_caller , update_user_caller , delete_user_caller
 import logging
 from logging.handlers import RotatingFileHandler
 import configparser
-import nsq
+import redis
 
 config = configparser.ConfigParser()
 #config.read('/home/neural/workarea/Aaditya/python/microservice_application/user_microservice/config.ini')
-config.read('/workspaces/sam_assignment/config.ini')
-
+config.read('/home/neuralit/shubham_workarea/python/microservice_application/config.ini')
+#/home/neuralit/shubham_workarea/python/microservice_application/user_microservice/main.py
 host = config['Server']['host']
 port = config['Server']['port']
 log_file_path = config['Log']['file_path']
@@ -56,7 +57,7 @@ def register_user(user: create_user):
 @app.get("/get_user_details/{user_id}")
 def get_user_details(user_id: int):
     try:
-        records = update_user_caller(user_id, logger)
+        records = view_records_logic(user_id, logger)
         
         if records:
             return JSONResponse(

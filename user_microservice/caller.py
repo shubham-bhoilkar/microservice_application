@@ -1,5 +1,5 @@
 import nsq
-import json
+import requests
 from user_api_function import register_user_logic
 import configparser
 
@@ -8,17 +8,27 @@ config = configparser.ConfigParser()
 config.read('/workspaces/sam_assignment/config.ini')
 
 host =config ['NSQ']['host']
-nsqd_port =config['NSQ']['nsqd_port']
-nsqlookupd_port= config['NSQ']['nsqlookupd_port']
+# nsqd_port =config['NSQ']['nsqd_port']
+# nsqlookupd_port= config['NSQ']['nsqlookupd_port']
 
-import nsq
 
 def register_user_caller(message, logger):
     try:
-        # Provide the NSQ producer address in a list
-        writer = nsq.Writer([host])
-        writer.pub("register-user", message.encode('utf-8'))
-        return True
+            # Define the NSQD HTTP endpoint
+        nsqd_http_url = "http://10.10.7.64:4151/pub?topic=register-user"
+
+        # Message payload
+#        message = "Hello, NSQ!"
+
+        # Send a POST request
+        response = requests.post(nsqd_http_url, data=message)
+
+        if response.status_code == 200:
+            logger.info(f"Message published successfully!")
+            return True
+        else:
+            logger.error(f"Failed to publish message:", response.status_code, exc_info =True)
+
     except Exception as e:
         logger.error(f"Error processing message: {e}", exc_info=True)
         return False
