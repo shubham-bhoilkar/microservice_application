@@ -78,7 +78,7 @@ def update_record(table_name: str, record_id: int, id_column: str = "user_id", d
         raise
 
 # Delete Record
-def delete_record(table_name: str, filters: dict,log =None):
+def delete_record(table_name: str, filters: dict,log = None):
     try:
         filter_clauses = " AND ".join(f"{value} = ?" for value in filters.values())
         query = f"DELETE FROM {table_name} WHERE {filter_clauses}"

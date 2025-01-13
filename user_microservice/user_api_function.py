@@ -1,7 +1,4 @@
 from util_pydobc import create_record , read_records , update_record ,delete_record
-import nsq
-import json
-
 
 def register_user_logic(user_data, log):
     try:
@@ -19,7 +16,7 @@ def register_user_logic(user_data, log):
             log.info(f"User registered successfully at user_api_function.")
             return True
         else:
-            log.error(f"User creation failed at user_api_function.")
+            log.error(f"User creation failed at user_api_function.", exc_info=True)
             return False
 
     except Exception as e:

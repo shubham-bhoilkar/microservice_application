@@ -60,7 +60,7 @@ def nsq_subscription_handler(queue_name, callback,log):
         # log.info(f"Subscribing to queue: {queue_name} on topic: 'your_topic_name'")
         nsq.run()
     except Exception as e:
-        log.error(f"Error during NSQ subscription: {e}",exc_info=True)
+        log.error(f"Error during NSQ subscription: {e}", exc_info=True)
         
 
 def register_user(message,log):
@@ -72,7 +72,7 @@ def register_user(message,log):
         if success:
             log.info(f"User registration succesful, requeueing message.")
         else:
-            log.error(f"Failed to register user, requeueing message.",exc_info =True)
+            log.error(f"Failed to register user, requeueing message.", exc_info =True)
 
     except Exception as e:
         log.error(f"Error processing message: {e}", exc_info=True)
@@ -87,10 +87,10 @@ def update_user_data(message,log):
         if success:
             log.info(f"User data update succesfully, requeueing message.")
         else:
-            log.error(f"Failed to update user data, requeueing message.",exc_info =True)
+            log.error(f"Failed to update user data, requeueing message.", exc_info =True)
 
     except Exception as e:
-        log.error(f"Error processing message: {e}",exc_info =True)
+        log.error(f"Error processing message: {e}", exc_info =True)
 
 def delete_user_data(message,log):
     try:
@@ -104,13 +104,10 @@ def delete_user_data(message,log):
             log.error(f"Failed to delete user data, requeueing message.",exc_info =True)
 
     except Exception as e:
-        log.error(f"Error processing message: {e}",exc_info =True)
+        log.error(f"Error processing message: {e}", exc_info =True)
 
 
 if __name__ == "__main__":
-    # Run the consumer
-    # register_nsq_consumer()
-    # read system argument and subscription to a topic and assign callback function
     queue_name = "register-user"
 #    channel_name = "RegisterChannel"
     def consumer_topic():
@@ -122,9 +119,7 @@ if __name__ == "__main__":
         elif queue_name == "delete-user":
             nsq_subscription_handler(queue_name,delete_user_data, logger)
         else:
-    #        log.error(f"{queue_name} not found")
-            print(f"Topic: {queue_name} not found.")
+            logger.error(f"{queue_name} not found", exc_info =True)
         return True
-    
-    consumer_topic()
-        
+
+    consumer_topic()        

@@ -10,7 +10,7 @@ host = config['NSQ']['host']
 def register_user_caller(message, logger):
     try:
         # Define the NSQD HTTP endpoint
-        nsqd_http_url = "http://10.10.7.64:4151/pub?topic=register-user"  # Updated port to the default NSQD HTTP port (4151)
+        nsqd_http_url = "http://10.10.6.54:4171/pub?topic=register-user"  # Updated port to the default NSQD HTTP port (4171)
 
         # Send the POST request with the message
         response = requests.post(nsqd_http_url, data={"message": message})  # Message should be sent in a key-value pair
@@ -28,7 +28,7 @@ def register_user_caller(message, logger):
 def update_user_caller(message,user_id, logger):
     try:
             # Define the NSQD HTTP endpoint
-        nsqd_http_url = f"http://10.10.7.64:4151/pub?topic=update-user"
+        nsqd_http_url = f"http://10.10.6.54:4171/pub?topic=update-user"
 
         payload = {"message":message,
                    "user_id":user_id}
@@ -47,7 +47,7 @@ def update_user_caller(message,user_id, logger):
 def delete_user_caller(message, logger):
     try:
             # Define the NSQD HTTP endpoint
-        nsqd_http_url = f"http://10.10.7.64:4151/pub?topic=delete-user"
+        nsqd_http_url = f"http://10.10.6.54:4171/pub?topic=delete-user"
 
         response = requests.post(nsqd_http_url, data={"message": message})
 
